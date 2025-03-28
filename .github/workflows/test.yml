@@ -1,0 +1,35 @@
+name: Deploy 
+run-name: ${{ github.actor }} has triggered the pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: "Select service to deploy"
+        required: true
+        type: choice
+        options:
+          - ALL
+          - option1
+jobs:
+  deploy:
+    name: stage
+    runs-on:
+      - ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize
+        run: |
+          echo "Selected service: ${{ github.event.inputs.SERVICE }}"
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.5"
+
+      - name: Intsall Python Fromatter (black)
+        run: |
+          pip install black
